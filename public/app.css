@@ -1,0 +1,43 @@
+.loader {
+    border: #f3f3f3;
+    border-top: 3px solid #272da8;
+    border-radius: 50%;
+    width: 100px;
+    height: 100px;
+    position: absolute;
+    animation: spin 900ms linear infinite;
+  }
+  
+  .loader-container {
+    width: 40px;
+    height: 40px;
+    position: absolute;
+    margin-left: 50%;
+    margin-top: 15%;
+    justify-content: center;
+    display: flex;
+  }
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+  
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+  
+
+  
+@media screen and (max-width: 768px) {
+
+
+  .loader-container {
+   
+    margin-left: 50%;
+    margin-top: 50%;
+    justify-content: center;
+    display: flex;
+  }
+
+}

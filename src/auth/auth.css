@@ -1,0 +1,67 @@
+/* AUth background*/
+
+.auth {
+    background-color: rgb(247, 250, 252, ) !important;
+
+}
+
+.text-error {
+    color: red;
+    font-weight: bold;
+    text-align: left;
+    float: left;
+    margin-right: 10.8rem;
+}
+
+.brand-name {
+    text-decoration: none;
+    color: #252859;
+    font-size: 1.5rem;
+    margin-left: 1rem;
+    font-weight: 500;
+}
+
+.forgot {
+    margin-right: 16.8rem;
+    color: #757575;
+    font-size: 14px;
+    display: inline-block;
+
+}
+.dey{
+color:#757575;
+align-items: center;
+text-align: center;
+font-weight: bold;
+
+}
+
+.dont {
+    float: right;
+    margin-right: 13rem;
+    color: #757575;
+    font-size: 14px;
+
+}
+
+@media screen and (max-width: 768px) {
+
+
+    .forgot {
+        
+        margin-right: 50%;
+        color: #757575;
+        display: inline-block;
+    
+    }
+    .dont {
+        float: right;
+        margin-right: 20%;
+        
+    
+    } 
+    .text-error {
+        margin-right: 23%;
+    }
+
+}
