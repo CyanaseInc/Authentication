@@ -5,16 +5,30 @@ import { NavLink } from "react-router-dom";
 import en from 'react-phone-number-input/locale/en.json';
 import axios from "axios";
 import { v4 as uuidv4 } from "uuid";
-
-// creating functional component ans getting props from app.js and destucturing them
+import RNLocalize from "react-localize";
+import Country from "../Country";
+// creating functional component ans getting props from app.js and destructuring them
 const StepTwo = ({ nextStep, prevStep }) => {
-
-    //// Set user phone number and country
     const [countryState, setCountryState] = useState({
         loading: false,
         countries: [],
         errorMessage: "",
     });
+    // on click submit state
+
+    const myChange = <Icon color="white" name="Loading2" size="20px" />;
+    const myOriginal = 'Continue';
+    const [buttonText, setButtonText] = useState(myOriginal);
+
+    const [inputs, setInputs] = useState({});
+    const { register, handleSubmit, formState: { errors } } = useForm();
+
+    // hnadle on change in forms
+    const handleChange = (event) => {
+        const name = event.target.name;
+        const value = event.target.value;
+        setInputs(values => ({ ...values, [name]: value }))
+    }
 
     useEffect(() => {
         const fetchData = async () => {
@@ -52,43 +66,12 @@ const StepTwo = ({ nextStep, prevStep }) => {
     //   find selected country data
     //search selected country
     const searchSelectedCountry = countries.find((obj) => {
-        if (obj.name.common === selectedCountry) {
+        if (obj.country_name === selectedCountry) {
             return true;
         }
         return false;
     });
-
-
-    // set states for th required components
-    const [inputs, setInputs] = useState({});
-    const { register, handleSubmit, formState: { errors } } = useForm();
-
-    // on click submit state
-
-    const myChange = <Icon color="white" name="Loading2" size="20px" />;
-    const myOriginal = 'Continue';
-    const [buttonText, setButtonText] = useState(myOriginal);
-
-    // handle on change in forms
-    const handleChange = (event) => {
-        const name = event.target.name;
-        const value = event.target.value;
-        setcode(event.target.value)
-    }
-
-    /// Set states for the value in country code
-
-    const ftext = searchSelectedCountry && searchSelectedCountry.idd.root;
-    const stext =  searchSelectedCountry && searchSelectedCountry.idd.suffixes; 
-    const phone= ftext+stext;
-
-
-
-
-
-    const [phoneCode, setCode] = useState("+256");
-
- 
+    const dialCode = searchSelectedCountry && searchSelectedCountry.dial_code;
     // handle submit function
     const onSubmit = () => {
         // change the status to loading
@@ -99,7 +82,6 @@ const StepTwo = ({ nextStep, prevStep }) => {
 
 
     }
-
 
     return (
         <>
@@ -131,67 +113,99 @@ const StepTwo = ({ nextStep, prevStep }) => {
                             <Image m={{ l: "45%" }} w={{ xs: '3rem', md: '3.7rem' }} bg={`#252859;`} src="img/signup.jpg" />
                             <p className='dey'>Tell us how we should contact you.</p>
                             <Div
-
+                                m={{ t: "2rem" }}
                                 d="flex"
                                 flexDir="column"
                                 justify="center"
                                 align="center">
 
                                 <section>
-                                    <div className="">
-                                        {/* header section */}
+                                    <Div className="">
 
-
-                                        {/* body section */}
                                         <div>
-                                            {loading === true ?
+
+                                            <div>
+
+                                            </div>
+                                            <div className="grid justify-center mt-14 mx-10 space-y-10">
+
+                                                <Div d="flex"
+                                                    flexDir="column"
+                                                    justify="center"
+                                                    align="center" >
+                                                    <select
+                                                        value={selectedCountry}
+                                                        onChange={(e) => setSelectedCountry(e.target.value)}
+                                                        className="myOptions"
+                                                    >
+                                                        <option className='select'>--Select Country--</option>
+                                                        
+                                                        {countries.map((item) => {
+                                                            return (
+                                                                <option name="country" key={uuidv4()} value={item.country_name}>
+                                                                    {item.country_name}
+                                                                </option>
+                                                            );
+                                                        })}
+                                                          {errors.country && <p className="text-error">Select country to continue</p>}
+                                                    </select>
+                                                </Div>
                                                 <div>
-                                                    <Icon name="Loading" size="20px" />
-                                                    <Text color={`#757575;`} align="center">Loading</Text>
-                                                </div> :
-                                                <div className="grid justify-center mt-14 mx-10 space-y-10">
 
-                                                    <div>
-                                                        <select
-                                                            value={selectedCountry}
-                                                            onChange={setCe()}
-                                                            className=" w-96 h-14 text-xl rounded-lg md:text-2xl "
-                                                        >
-                                                            <Dropdown>--Select Country--</Dropdown>
-                                                            {countries.map((item) => {
-                                                                return (
-                                                                    <option key={uuidv4()} value={item.name.common}>
-                                                                        {item.name.common}
-                                                                    </option>
-                                                                );
-                                                            })}
-                                                        </select>
-                                                    </div>
-                                                    <div>
-                                                        {searchSelectedCountry && (
-                                                            <div className="flex space-x-4">
-                                                                {phone}
-                                                                <div>
-                                                                    <Input value={phoneCode} w={{ xs: '100%', md: '24rem' }}
-                                                                        m={{ t: "2rem" }}
-                                                                        {...register("country", { required: true, minLength: 5, maxLength: 55 })}
-                                                                        placeholder="Enter your country"
-                                                                        onChange={(e) => setCode(e.target.value)} name="phone" type="tel"
+                                                    <div className="flex space-x-4">
 
-                                                                        p={{ x: "2.5rem" }}
-                                                                    />             {errors.country && <p className="text-error">Your country is required</p>}
+                                                        <div>
+                                                            <Input
+                                                                defaultValue={dialCode} w={{ xs: '100%', md: '24rem' }}
+                                                                m={{ t: "2rem" }}
+                                                                {...register("phone", { required: true, minLength: 5, maxLength: 55 })}
+                                                                placeholder="Enter your phone number"
+                                                                name="phone" type="tel"
+                                                                prefix={
+                                                                    <Icon
+                                                                        name="Email"
+                                                                        color="warning800"
+                                                                        size="16px"
+                                                                        cursor="pointer"
+                                                                        pos="absolute"
+                                                                        top="50%"
+                                                                        left="0.75rem"
+                                                                        transform="translateY(-50%)"
+                                                                    />
+                                                                }
+                                                                p={{ x: "2.5rem" }}
+                                                            />             {errors.phone && <p className="text-error">Your phone number is required</p>}
 
 
-                                                                </div>
-                                                            </div>
-                                                        )}
+                                                        </div>
                                                     </div>
 
                                                 </div>
-                                            }
+
+                                            </div>
+
                                         </div>
-                                    </div>
+                                    </Div>
                                 </section>
+                                <Input onKeyPress w={{ xs: '100%', md: '24rem' }} m={{ t: "2rem" }} {...register("email", { required: true, maxLength: 15 })}
+                                    placeholder="Enter your email" onChange={handleChange} name="email" type="text"
+
+                                    p={{ x: "2.5rem" }}
+                                    prefix={
+                                        <Icon
+                                            name="Email"
+                                            color="warning800"
+                                            size="16px"
+                                            cursor="pointer"
+                                            pos="absolute"
+                                            top="50%"
+                                            left="0.75rem"
+                                            transform="translateY(-50%)"
+                                        />
+                                    }
+                                />
+
+                                {errors.email && <p className="text-error">Your email is required</p>}
                                 <Row>
                                     <Col>
                                         <Button onClick={prevStep}

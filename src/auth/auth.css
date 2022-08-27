@@ -43,10 +43,26 @@ font-weight: bold;
     font-size: 14px;
 
 }
+.myOptions{
+border-top: none;
+border-left:none;
+border-right: none;
+width: 24rem;
+border-bottom: 1px solid rgb(201, 206, 214);
+}
+.select{
+ font-size: 20px;
+ color:rgb(201, 206, 214);
+ text-align: center;
+}
+
 
 @media screen and (max-width: 768px) {
 
-
+    .myOptions{
+        width: 100%;
+        
+        }
     .forgot {
         
         margin-right: 50%;
