@@ -21,27 +21,36 @@ module.exports = {
         exclude: /node_modules/,
         loader: "babel-loader"
       },
-    {
-                test: /\.css$/,
-                use: [
-                    { loader: 'style-loader' },
-                    { loader: 'css-loader' },
-              
-                ]
-            },
-            {
-                  test: /\.(jpe?g|png|svg)$/i,
-                  use: [
-                   {loader:'file-loader'},
-                   {loader:'image-webpack-loader'},
+      {
+        test: /\.css$/,
+        use: [
+          { loader: 'style-loader' },
+          { loader: 'css-loader' },
+
+        ]
+      },
+      {
+        test: /\.(jpe?g|png|svg)$/i,
+        use: [
+          { loader: 'file-loader' },
+          { loader: 'image-webpack-loader' },
         ],
-              
 
 
-            },
+
+      },
+      {
+        test: /\.(woff2?|eot|ttf|otf)$/,
+        loader: 'file-loader',
+        options: {
+          limit: 10000,
+          name: '[name].[hash:7].[ext]'
+        }
+      },
+
     ],
   },
-   
+
   plugins: [
     new webpack.DefinePlugin({
       "process.env.NODE_ENV": JSON.stringify(process.env.NODE_ENV)
@@ -49,6 +58,6 @@ module.exports = {
   ],
   devServer: {
     contentBase: "public/",
-     historyApiFallback: true,
+    historyApiFallback: true,
   }
 };

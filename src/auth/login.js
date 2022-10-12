@@ -4,7 +4,7 @@ import './auth.css';
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { NavLink } from "react-router-dom";
-
+import { Iconly } from "react-iconly";
 
 function Login() {
 
@@ -90,9 +90,9 @@ function Login() {
             >
 
 
-                <Div className="contact" bg={`#fff`} 
-                    w={{ xs: '80%', md: '80vh' }} h={{ xs: 'auto', md: 'auto' }}  p={{ x: "1rem", y: "1rem" }}
-align="center"
+                <Div className="contact" bg={`#fff`}
+                    w={{ xs: '80%', md: '80vh' }} h={{ xs: 'auto', md: 'auto' }} p={{ x: "1rem", y: "1rem" }}
+                    align="center"
                     shadow="4">
 
                     <Container>
@@ -114,35 +114,33 @@ align="center"
 
                                     p={{ x: "2.5rem" }}
                                     prefix={
-                                        <Icon
-                                            name="UserSolid"
-                                            color="warning800"
-                                            size="16px"
-                                            cursor="pointer"
-                                            pos="absolute"
-                                            top="50%"
-                                            left="0.75rem"
-                                            transform="translateY(-50%)"
+                                       
+                                        <Iconly
+                                            className="ivn"
+                                            name="User"
+                                            primaryColor={`#252859`}
+                                            set='bulk'
+                                            secondaryColor='orange'
+                                            stroke='bold'
                                         />
                                     }
                                 />
 
                                 {errors.phone && <p className="text-error">Your phone number is required</p>}
 
-                                <Input w={{ xs: '100%', md: '24rem' }} m={{ t: "2rem" }}   {...register("password", { required: true, maxLength: 55 })}
-                                    placeholder="Enter your password" onChange={handleChange} name="password" type="password"
+                                <Input  p={{ x: "2.5rem" }}
+                                    w={{ xs: '100%', md: '24rem' }} m={{ t: "2rem" }}   {...register("password", { required: true, maxLength: 55 })}
+                                    placeholder="Enter your password"  name="password" type="password"
 
-                                    p={{ x: "2.5rem" }}
                                     prefix={
-                                        <Icon
-                                            name="Email"
-                                            color="warning800"
-                                            size="16px"
-                                            cursor="pointer"
-                                            pos="absolute"
-                                            top="50%"
-                                            left="0.75rem"
-                                            transform="translateY(-50%)"
+                                       
+                                        <Iconly
+                                            className="ivn"
+                                            name="Password"
+                                            primaryColor={`#252859`}
+                                            set='bulk'
+                                            secondaryColor='orange'
+                                            stroke='bold'
                                         />
                                     }
                                 />             {errors.password && <p className="text-error">Your password is required</p>}

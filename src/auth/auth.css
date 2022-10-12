@@ -1,7 +1,19 @@
 /* AUth background*/
 
+body {
+    font-family: "Poppins";
+  }
 .auth {
     background-color: rgb(247, 250, 252, ) !important;
+
+}
+
+.ivn {
+    transform: translateY(-50%);
+    top: 50%;
+    position: absolute;
+    left: 0.75rem;
+   
 
 }
 
@@ -28,54 +40,60 @@
     display: inline-block;
 
 }
-.dey{
-color:#757575;
-align-items: center;
-text-align: center;
-font-weight: bold;
+
+.dey {
+    color: #757575;
+    align-items: center;
+    text-align: center;
+    font-weight: bold;
 
 }
 
 .dont {
     float: right;
-    margin-right: 13rem;
+    margin-right: 9rem;
     color: #757575;
     font-size: 14px;
 
 }
-.myOptions{
-border-top: none;
-border-left:none;
-border-right: none;
-width: 24rem;
-border-bottom: 1px solid rgb(201, 206, 214);
+
+.myOptions {
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    width: 24rem;
+    border-bottom: 1px solid rgb(201, 206, 214);
 }
-.select{
- font-size: 20px;
- color:rgb(201, 206, 214);
- text-align: center;
+
+.select {
+    font-size: 20px;
+    color: rgb(201, 206, 214);
+    text-align: center;
 }
 
 
 @media screen and (max-width: 768px) {
 
-    .myOptions{
+    .myOptions {
         width: 100%;
-        
-        }
+
+    }
+
     .forgot {
-        
+
         margin-right: 50%;
         color: #757575;
         display: inline-block;
-    
+
     }
+
     .dont {
         float: right;
-        margin-right: 20%;
-        
-    
-    } 
+        margin-right: 10%;
+
+
+    }
+
     .text-error {
         margin-right: 23%;
     }

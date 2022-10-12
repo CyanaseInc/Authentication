@@ -3,8 +3,8 @@ import { Text, Input, Div, Row, Col, Anchor, Icon, Container, Button, Image } fr
 import validator from "validator";
 import { useForm } from "react-hook-form";
 import { NavLink } from "react-router-dom";
-
-
+import { Iconly } from "react-iconly";
+import '../auth.css';
 
 // creating functional component ans getting props from app.js and destucturing them
 const StepOne = ({ nextStep, handleFormData, values }) => {
@@ -76,19 +76,18 @@ const StepOne = ({ nextStep, handleFormData, values }) => {
                             align="center">
 
                             <Input onKeyPress w={{ xs: '100%', md: '24rem' }} m={{ t: "2rem" }} {...register("fname", { required: true, maxLength: 15 })}
-                                placeholder="Enter your First name" onChange={handleChange} name="fname" type="text"
+                                placeholder="First name" onChange={handleChange} name="fname" type="text"
 
                                 p={{ x: "2.5rem" }}
                                 prefix={
-                                    <Icon
-                                        name="UserSolid"
-                                        color="warning800"
-                                        size="16px"
-                                        cursor="pointer"
-                                        pos="absolute"
-                                        top="50%"
-                                        left="0.75rem"
-                                        transform="translateY(-50%)"
+                                       
+                                    <Iconly
+                                        className="ivn"
+                                        name="User"
+                                        primaryColor={`#252859`}
+                                        set='bulk'
+                                        secondaryColor='orange'
+                                        stroke='bold'
                                     />
                                 }
                             />
@@ -96,19 +95,18 @@ const StepOne = ({ nextStep, handleFormData, values }) => {
                             {errors.fname && <p className="text-error">Your first name is required</p>}
 
                             <Input w={{ xs: '100%', md: '24rem' }} m={{ t: "2rem" }}   {...register("lname", { required: true, maxLength: 55 })}
-                                placeholder="Enter your last name" onChange={handleChange} name="lname" type="text"
+                                placeholder="last name" onChange={handleChange} name="lname" type="text"
 
                                 p={{ x: "2.5rem" }}
                                 prefix={
-                                    <Icon
-                                        name="Email"
-                                        color="warning800"
-                                        size="16px"
-                                        cursor="pointer"
-                                        pos="absolute"
-                                        top="50%"
-                                        left="0.75rem"
-                                        transform="translateY(-50%)"
+                                       
+                                    <Iconly
+                                        className="ivn"
+                                        name="User"
+                                        primaryColor={`#252859`}
+                                        set='bulk'
+                                        secondaryColor='orange'
+                                        stroke='bold'
                                     />
                                 }
                             />             {errors.lname && <p className="text-error">Your last name is required</p>}

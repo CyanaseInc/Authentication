@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { Input, Div, Row, Col, Icon, Container, Button, Image, Text, Dropdown } from "atomize";
+import { Input, Div, Row, Col, Icon, Container, Button, Image } from "atomize";
 import { useForm } from "react-hook-form";
 import { NavLink } from "react-router-dom";
-import en from 'react-phone-number-input/locale/en.json';
 import axios from "axios";
 import { v4 as uuidv4 } from "uuid";
-import RNLocalize from "react-localize";
-import Country from "../Country";
+import '../auth.css';
+
+import { Iconly } from "react-iconly";
 // creating functional component ans getting props from app.js and destructuring them
 const StepTwo = ({ nextStep, prevStep }) => {
     const [countryState, setCountryState] = useState({
@@ -139,7 +139,7 @@ const StepTwo = ({ nextStep, prevStep }) => {
                                                         className="myOptions"
                                                     >
                                                         <option className='select'>--Select Country--</option>
-                                                        
+
                                                         {countries.map((item) => {
                                                             return (
                                                                 <option name="country" key={uuidv4()} value={item.country_name}>
@@ -147,7 +147,7 @@ const StepTwo = ({ nextStep, prevStep }) => {
                                                                 </option>
                                                             );
                                                         })}
-                                                          {errors.country && <p className="text-error">Select country to continue</p>}
+                                                        {errors.country && <p className="text-error">Select country to continue</p>}
                                                     </select>
                                                 </Div>
                                                 <div>
@@ -155,27 +155,27 @@ const StepTwo = ({ nextStep, prevStep }) => {
                                                     <div className="flex space-x-4">
 
                                                         <div>
-                                                            <Input
-                                                                defaultValue={dialCode} w={{ xs: '100%', md: '24rem' }}
+                                                        <Input   defaultValue={dialCode} w={{ xs: '100%', md: '24rem' }}
                                                                 m={{ t: "2rem" }}
                                                                 {...register("phone", { required: true, minLength: 5, maxLength: 55 })}
                                                                 placeholder="Enter your phone number"
                                                                 name="phone" type="tel"
+                                                                p={{ x: "2.5rem" }}
                                                                 prefix={
-                                                                    <Icon
-                                                                        name="Email"
-                                                                        color="warning800"
-                                                                        size="16px"
-                                                                        cursor="pointer"
-                                                                        pos="absolute"
-                                                                        top="50%"
-                                                                        left="0.75rem"
-                                                                        transform="translateY(-50%)"
+
+                                                                    <Iconly
+                                                                        className="ivn"
+                                                                        name="Call"
+                                                                        primaryColor={`#252859`}
+                                                                        set='bulk'
+                                                                        secondaryColor='orange'
+                                                                        stroke='bold'
                                                                     />
                                                                 }
-                                                                p={{ x: "2.5rem" }}
-                                                            />             {errors.phone && <p className="text-error">Your phone number is required</p>}
+                                                            />
 
+                                                            {errors.phone && <p className="text-error">Your phone number is required</p>}
+                                                            
 
                                                         </div>
                                                     </div>
@@ -188,25 +188,24 @@ const StepTwo = ({ nextStep, prevStep }) => {
                                     </Div>
                                 </section>
                                 <Input onKeyPress w={{ xs: '100%', md: '24rem' }} m={{ t: "2rem" }} {...register("email", { required: true, maxLength: 15 })}
-                                    placeholder="Enter your email" onChange={handleChange} name="email" type="text"
+                                    placeholder="Enter email" onChange={handleChange} name="email" type="text"
 
                                     p={{ x: "2.5rem" }}
                                     prefix={
-                                        <Icon
-                                            name="Email"
-                                            color="warning800"
-                                            size="16px"
-                                            cursor="pointer"
-                                            pos="absolute"
-                                            top="50%"
-                                            left="0.75rem"
-                                            transform="translateY(-50%)"
+
+                                        <Iconly
+                                            className="ivn"
+                                            name="Message"
+                                            primaryColor={`#252859`}
+                                            set='bulk'
+                                            secondaryColor='orange'
+                                            stroke='bold'
                                         />
                                     }
                                 />
 
-                                {errors.email && <p className="text-error">Your email is required</p>}
-                                <Row>
+                                {errors.email && <p className="text-error">Check your email</p>}
+                                <Row flexDir={{ xs: 'row', lg: 'row' }}>
                                     <Col>
                                         <Button onClick={prevStep}
                                             align="center"

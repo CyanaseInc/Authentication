@@ -3,7 +3,8 @@ import { Text, Input, Div, Row, Col, Anchor, Icon, Container, Button, Image } fr
 import validator from "validator";
 import { useForm } from "react-hook-form";
 import { NavLink } from "react-router-dom";
-
+import Radio from"./radio";
+import DatePicker from './DatePicker';  
 
 
 // creating functional component ans getting props from app.js and destucturing them
@@ -20,13 +21,7 @@ const StepThree = ({ nextStep, handleFormData, prevStep, values }) => {
     const myOriginal = 'Continue';
     const [buttonText, setButtonText] = useState(myOriginal);
 
-    // hnadle on change in forms
-    const handleChange = (event) => {
-        const name = event.target.name;
-        const value = event.target.value;
-        setInputs(values => ({ ...values, [name]: value }))
-    }
- 
+   
     // handle submit function
     const onSubmit = () => {
    // change the status to loading
@@ -35,7 +30,7 @@ const StepThree = ({ nextStep, handleFormData, prevStep, values }) => {
 
    nextStep();
 
-        
+    
     }
  
 
@@ -76,45 +71,8 @@ const StepThree = ({ nextStep, handleFormData, prevStep, values }) => {
                                 justify="center"
                                 align="center">
 
-                                <Input  w={{ xs: '100%', md: '24rem' }} m={{ t: "2rem" }} {...register("phone", { required: true, maxLength: 15 })}
-                                    placeholder="Enter your Phone number" onChange={handleChange} name="phone" type="tel"
-
-                                    p={{ x: "2.5rem" }}
-                                    prefix={
-                                        <Icon
-                                            name="UserSolid"
-                                            color="warning800"
-                                            size="16px"
-                                            cursor="pointer"
-                                            pos="absolute"
-                                            top="50%"
-                                            left="0.75rem"
-                                            transform="translateY(-50%)"
-                                        />
-                                    }
-                                />
-
-                                {errors.phone && <p className="text-error">Your phone number is required</p>}
-
-                                <Input w={{ xs: '100%', md: '24rem' }} m={{ t: "2rem" }}   {...register("password", { required: true, maxLength: 55 })}
-                                    placeholder="Enter your password" onChange={handleChange} name="password" type="password"
-
-                                    p={{ x: "2.5rem" }}
-                                    prefix={
-                                        <Icon
-                                            name="Email"
-                                            color="warning800"
-                                            size="16px"
-                                            cursor="pointer"
-                                            pos="absolute"
-                                            top="50%"
-                                            left="0.75rem"
-                                            transform="translateY(-50%)"
-                                        />
-                                    }
-                                />             {errors.password && <p className="text-error">Your password is required</p>}
-                               
-
+                             <Radio></Radio>
+                             <DatePicker></DatePicker> 
                                 <Row>
                                     <Col>
                                     <Button onClick={prevStep}
