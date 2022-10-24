@@ -187,7 +187,10 @@ const StepTwo = ({ nextStep, prevStep }) => {
                                         </div>
                                     </Div>
                                 </section>
-                                <Input onKeyPress w={{ xs: '100%', md: '24rem' }} m={{ t: "2rem" }} {...register("email", { required: true, maxLength: 15 })}
+                                <Input
+                                 onKeyPress w={{ xs: '100%', md: '24rem' }}
+                                  m={{ t: "2rem" }}
+                                   {...register("email", { required: true, maxLength: 65 })}
                                     placeholder="Enter email" onChange={handleChange} name="email" type="text"
 
                                     p={{ x: "2.5rem" }}
