@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Text, Input, Div, Row, Col, Anchor, Icon, Container, Button, Image } from "atomize";
 import validator from "validator";
 import { useForm } from "react-hook-form";
@@ -20,7 +20,7 @@ const StepOne = ({ nextStep, handleFormData, values }) => {
     const myOriginal = 'Continue';
     const [buttonText, setButtonText] = useState(myOriginal);
 
-    // hnadle on change in forms
+    
     const handleChange = (event) => {
         const name = event.target.name;
         const value = event.target.value;
@@ -28,13 +28,15 @@ const StepOne = ({ nextStep, handleFormData, values }) => {
     }
 
     // handle submit function
-    const onSubmit = (e) => {
+    const onSubmit = (el) => {
 
         // change the status to loading
         setButtonText(myChange);
         // load net step
 
-        nextStep();
+       
+        localStorage.setItem('LoginNames', JSON.stringify(el));
+         nextStep();
     }
     //creating error state for validation
     const [error, setError] = useState(false);
@@ -43,100 +45,87 @@ const StepOne = ({ nextStep, handleFormData, values }) => {
     return (
         <>
 
-            <Div className="auth"
 
-                d="flex"
-                flexDir="column"
-                justify="center"
-                align="center"
-                textSize="display2"
-                textWeight="500"
-                top="50%"
-            p={{ x: "1rem", y: "4rem" }}
-    >
+            <form className="myform" onSubmit={handleSubmit(onSubmit)}>
 
+            <Div d="flex" align="center" justify="center">
+                    <Image  w={{ xs: '3rem', md: '3.7rem' }} bg={`#252859;`} src="img/signup.jpg" />
 
-            <Div className="contact" bg={`#fff`}
-                w={{ xs: '80%', md: '80vh' }} h={{ xs: 'auto', md: 'auto' }} p={{ x: "1rem", y: "1rem" }}
-                align="center"
-                shadow="4">
+                </Div>
+                <Div d="flex" justify="center">
+                    <p className='dey'>
+                        What is your name?
+                    </p>
+                </Div>
+                <Div
 
-                <Container>
-                    <Image m={{ t: "2rem", l: "37%" }} d="inline-block" w={{ xs: '4rem', md: '7.7rem' }} src="img/vnm.png" />
+                    d="flex"
+                    flexDir="column"
+                    justify="center"
+                    align="center">
 
-                    <form className="myform" onSubmit={handleSubmit(onSubmit)}>
+                    <Input w={{ xs: '18rem', md: '24rem' }} rounded="circle"  m={{ t: "2rem" }}
+                        {...register("fname", { required: true, maxLength: 15 })}
+                        placeholder="First name" name="fname" type="text"
+                        defaultValue={values.fname}
+                        onChange={handleChange}
+                        p={{ x: "2.5rem" }}
+                        prefix={
 
-                        <Image m={{ l: "45%" }} w={{ xs: '3rem', md: '3.7rem' }} bg={`#252859;`} src="img/signup.jpg" />
-                        <p className='dey'>What is your name?</p>
-                        <Div
-
-                            d="flex"
-                            flexDir="column"
-                            justify="center"
-                            align="center">
-
-                            <Input onKeyPress w={{ xs: '100%', md: '24rem' }} m={{ t: "2rem" }} {...register("fname", { required: true, maxLength: 15 })}
-                                placeholder="First name" onChange={handleChange} name="fname" type="text"
-
-                                p={{ x: "2.5rem" }}
-                                prefix={
-                                       
-                                    <Iconly
-                                        className="ivn"
-                                        name="User"
-                                        primaryColor={`#252859`}
-                                        set='bulk'
-                                        secondaryColor='orange'
-                                        stroke='bold'
-                                    />
-                                }
+                            <Iconly
+                                className="ivn"
+                                name="User"
+                                primaryColor={`#252859`}
+                                set='bulk'
+                                secondaryColor='orange'
+                                stroke='bold'
                             />
+                        }
+                    />
 
-                            {errors.fname && <p className="text-error">Your first name is required</p>}
+                    {errors.fname && <p className="text-error">Your first name is required</p>}
 
-                            <Input w={{ xs: '100%', md: '24rem' }} m={{ t: "2rem" }}   {...register("lname", { required: true, maxLength: 55 })}
-                                placeholder="last name" onChange={handleChange} name="lname" type="text"
+                    <Input w={{ xs: '18rem', md: '24rem' }} rounded="circle" m={{ t: "2rem" }}
+                        {...register("lname", { required: true, maxLength: 55 })}
+                        placeholder="last name" name="lname" type="text"
+                        defaultValue={values.lname}
+                        onChange={handleChange}
+                        p={{ x: "2.5rem" }}
+                        prefix={
 
-                                p={{ x: "2.5rem" }}
-                                prefix={
-                                       
-                                    <Iconly
-                                        className="ivn"
-                                        name="User"
-                                        primaryColor={`#252859`}
-                                        set='bulk'
-                                        secondaryColor='orange'
-                                        stroke='bold'
-                                    />
-                                }
-                            />             {errors.lname && <p className="text-error">Your last name is required</p>}
-                            <Button variant="primary" type='submit'
-                                align="center"
-                                shadow="3"
-                                hoverShadow="4"
-                                bg={`#252859`}
-                                m={{ t: "1rem" }}
-                                w={{ xs: '100%', md: '24rem' }}
-                            >
-                                {buttonText}
-                            </Button>
-                            <span className='dont'>Already have an account?<a>  <NavLink to="/login" >
-                                Login
-                            </NavLink></a></span>
-                        </Div>
+                            <Iconly
+                                className="ivn"
+                                name="User"
+                                primaryColor={`#252859`}
+                                set='bulk'
+                                secondaryColor='orange'
+                                stroke='bold'
+                            />
+                        }
+                    />             {errors.lname && <p className="text-error">Your last name is required</p>}
+                    <Button variant="primary" type='submit'
+                        align="center"rounded="circle" 
+                        shadow="3"
+                        hoverShadow="4"
+                        bg={`#252859`}
+                        m={{ t: "1rem" }}
+                        w={{ xs: '18rem', md: '24rem' }}
+                    >
+                        {buttonText}
+                    </Button>
+                    <span className='dont'>Already have an account?<a>  <NavLink to="/login" >
+                        Login
+                    </NavLink></a></span>
+                </Div>
 
 
 
-                    </form>
-                    <Div></Div>
+            </form>
 
-                </Container>
-            </Div>
-        </Div>
 
-</>
+        </>
 
-  );
+    );
 };
 
 export default StepOne;

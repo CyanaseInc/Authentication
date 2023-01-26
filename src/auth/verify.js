@@ -55,7 +55,7 @@ function   Verify() {
 
         // send data to the API
 
-        const API_PATH = 'http://localhost:3000/handler.php';
+        const API_PATH = 'https://api.cyanase.com:3000/handler.php';
 
         // MAKE AN AJAX REQUEST
 
@@ -113,7 +113,7 @@ align="center"
 <Input w={{ xs: '100%', md: '24rem' }} m={{ t: "2rem" }}   {...register("code", { required: true, maxLength: 55,  })}
                     placeholder="Verification code" onChange={handleChange} name="code" type="text"
 
-                    p={{ x: "2.5rem" }} m={{ t: "2rem" }}
+                    p={{ x: "2.5rem" }} 
                     prefix={
                       <Icon
                         name="Email"
@@ -141,9 +141,6 @@ align="center"
                                 </Button>
                                
                             </Div>
-
-
-
                         </form>
                         <Div></Div>
 

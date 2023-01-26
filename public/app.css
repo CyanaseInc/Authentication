@@ -13,7 +13,7 @@
     height: 40px;
     position: absolute;
     margin-left: 50%;
-    margin-top: 15%;
+    top: 25%;
     justify-content: center;
     display: flex;
   }
@@ -34,8 +34,9 @@
 
   .loader-container {
    
+    position:absolute;
     margin-left: 50%;
-    margin-top: 50%;
+    margin-top: 10%;
     justify-content: center;
     display: flex;
   }

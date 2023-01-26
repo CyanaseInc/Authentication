@@ -1,160 +1,123 @@
+
 import React from 'react';
 import { Text, Input, Div, Row, Col, Anchor, Image, Icon, Container, Button } from "atomize";
-import './auth.css';
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import Signup from "./signup";
-import { NavLink } from "react-router-dom";
+import { useState, useEffect } from "react";
+import 'regenerator-runtime/runtime';
+import StepOne from "./password/StepOne";
+import StepTwo from "./password/StepTwo";
+import Password from "./password/Password";
+import Final from "./password/Final";
+
 
 
 function Forgot() {
+  //state for steps
+  const [step, setstep] = useState(1);
 
-    // set states for th required components
-    const [inputs, setInputs] = useState({});
-    const { register, handleSubmit, formState: { errors } } = useForm();
+  const Mydate = input => e => {
+    // input value from the form
 
-    // on click submit state
+    const { mydate } = e.target;
+    //updating for data state taking previous state and then adding new value to create new object
+    console.log(mydate);
+  }
 
-    const myChange = <Icon color="white" name="Loading2" size="20px" />;
-    const myOriginal = 'Continue';
-    const [buttonText, setButtonText] = useState(myOriginal);
 
-    // hnadle on change in forms
-    const handleChange = (event) => {
-        const name = event.target.name;
-        const value = event.target.value;
-        setInputs(values => ({ ...values, [name]: value }))
+  // function for going to next step by increasing step state by 1
+  const nextStep = () => {
+    setstep(step + 1);
+  };
+
+  // function for going to previous step by decreasing step state by 1
+  const prevStep = () => {
+    setstep(step - 1);
+  };
+
+  // handling form input data by taking onchange value and updating our previous form data state
+  const handleInputData = input => e => {
+    // input value from the form
+    const { value } = e.target;
+
+    //updating for data state taking previous state and then adding new value to create new object
+
+  }
+
+
+  // javascript switch case to show different form in each step
+
+  const Mysteps = () => {
+
+    switch (step) {
+      // case 1 to show stepOne form and passing nextStep, prevStep, and handleInputData as handleFormData method as prop and also formData as value to the fprm
+      case 1:
+        return (
+
+
+          <StepOne nextStep={nextStep}  />
+
+        );
+      // case 2 to show stepTwo form passing nextStep, prevStep, and handleInputData as handleFormData method as prop and also formData as value to the fprm
+      case 2:
+        return (
+
+          <StepTwo nextStep={nextStep} prevStep={prevStep}  />
+
+        );
+      case 3:
+        return (
+
+          <Password nextStep={nextStep} prevStep={prevStep}  />
+
+        );
+    
+   
+      // Only formData is passed as prop to show the final value at form submit
+      case 4:
+        return (
+          <div className="App">
+            <Container>
+              <Row>
+                <Col md={{ span: 6, offset: 3 }} className="custom-margin">
+                  <Final />
+                </Col>
+              </Row>
+            </Container>
+          </div>
+        );
+
+      // default case to show nothing
+      default:
+        return (
+          <div className="App">
+          </div>
+        );
     }
-    /// when a user starts typing phone number
-
-    const handleKeyPress = (event) => {
-        const phoneno = document.getElementById('phone').value;
-        const firsttext = phoneno[0];
-
-        if (firsttext === "0") {
-            const newNumber = phoneno.replace(firsttext, "+256" + "");
-
-            phoneno(newNumber);
-
-        } else if (firsttext === "7") {
-
-            const newNumber = phoneno.replace(firsttext, "+2567" + "");
-
-            phoneno(newNumber);
-
-        }
-
-    }
-
-    // handle submit function
-    const onSubmit = (datal) => {
-
-        // change the status to laoding
-        setButtonText(myChange);
-        console.log(datal);
-
-        // send data to the API
-
-        const API_PATH = 'http://localhost:3000/handler.php';
-
-        // MAKE AN AJAX REQUEST
-
-        axios({
-            method: 'post',
-            url: `${API_PATH}`,
-            headers: { 'content-type': 'application/json' },
-            data: datal
-        })
-            .then(resulta => {
-
-                console.log(resulta.result);
-            })
-            .catch(error => alert(error));
-    }
-
-    return (
 
 
-        <>
+  }
+  return (
+    <>
+      <Div p="3rem" className="contact" m={{
+        t: { xs: '10%', md: '3rem' },
 
-            <Div className="auth"
-                textColor="black900"
-                minH="100vh"
+      }}
+        w={{ xs: '95%', md: '80vh' }}
+        h={{ xs: 'auto', md: 'auto' }}
+      >
+        <Div m={{t:"2rem"}} d="flex" align="center" justify="center">
+          <Image
+          p="1rem"
+            d="inline-block"
+            w={{ xs: '4rem', md: '7.7rem' }}
+            src="img/vnm.png" />
+        </Div>
+        <Mysteps />
 
-                d="flex"
-                flexDir="column"
-                justify="center"
-                align="center"
-                textSize="display2"
-                fontFamily="secondary"
-                textWeight="500"
-                p={{ x: "1rem", y: "4rem" }}
-            >
 
+      </Div>
 
-                <Div className="contact" bg={`#fff`} 
-                    w={{ xs: '80%', md: '80vh' }} h={{ xs: 'auto', md: 'auto' }}     p={{ x: "1rem", y: "4rem" }}
-align="center"
-                    shadow="4">
-
-                    <Container>
-                        <Image m={{ t: "2rem", l: "37%" }} d="inline-block" w={{ xs: '4rem', md: '7.7rem' }} src="img/vnm.png" />
-
-                        <form className="myform" onSubmit={handleSubmit(onSubmit)}>
-
-                            <Image m={{ l: "45%" }} w={{ xs: '3rem', md: '3.7rem' }} bg={`#252859;`} src="img/login.jpg" />
-                            <p className='dey'>Recover your account</p>
-                            <Div
-
-                                d="flex"
-                                flexDir="column"
-                                justify="center"
-                                align="center">
-
-<Input w={{ xs: '100%', md: '24rem' }} m={{ t: "2rem" }}   {...register("email", { required: true, maxLength: 55, pattern: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/ })}
-                    placeholder="Email address" onChange={handleChange} name="email" type="text"
-
-                    p={{ x: "2.5rem" }} m={{ t: "2rem" }}
-                    prefix={
-                      <Icon
-                        name="Email"
-                        color="warning800"
-                        size="16px"
-                        cursor="pointer"
-                        pos="absolute"
-                        top="50%"
-                        left="0.75rem"
-                        transform="translateY(-50%)"
-                      />
-                    }
-                  />
-                  {errors.email && <p className="text-error">Please enter the right email address</p>}
-
-                                <Button type='submit'
-                                    align="center"
-                                    shadow="3"
-                                    hoverShadow="4"
-                                    bg={`#252859`}
-                                    m={{ t: "1rem" }}
-                                    w={{ xs: '100%', md: '24rem' }}
-                                >
-                                    {buttonText}
-                                </Button>
-                               
-                            </Div>
-
-                        </form>
-                        <Div></Div>
-
-                    </Container>
-                </Div>
-            </Div>
-
-        </>
-    );
+    </>
+  )
 }
-
-
-
 
 export default Forgot;

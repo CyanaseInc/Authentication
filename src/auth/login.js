@@ -1,15 +1,17 @@
 import React from 'react';
 import { Input, Div, Image, Icon, Container, Button } from "atomize";
 import './auth.css';
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { NavLink } from "react-router-dom";
+import { NavLink, } from "react-router-dom";
 import { Iconly } from "react-iconly";
+import axios from 'axios';
 
 function Login() {
 
     // set states for th required components
     const [inputs, setInputs] = useState({});
+
     const { register, handleSubmit, formState: { errors } } = useForm();
 
     // on click submit state
@@ -17,58 +19,87 @@ function Login() {
     const myChange = <Icon color="white" name="Loading2" size="20px" />;
     const myOriginal = 'Continue';
     const [buttonText, setButtonText] = useState(myOriginal);
-
+    const [myText, SetText] = useState("Add details to login");
+    const [ShowPassword, hidePassword] = useState(false);
     // handle on change in forms
+
+    // states to handle user country cide
+    const [countryCode, setCode] = ("+256");
+
     const handleChange = (event) => {
+
         const name = event.target.name;
         const value = event.target.value;
+
         setInputs(values => ({ ...values, [name]: value }))
+
     }
     /// when a user starts typing phone number
 
-    const handleKeyPress = (event) => {
-        const phoneno = document.getElementById('phone').value;
-        const firsttext = phoneno[0];
-
-        if (firsttext === "0") {
-            const newNumber = phoneno.replace(firsttext, "+256" + "");
-
-            phoneno(newNumber);
-
-        } else if (firsttext === "7") {
-
-            const newNumber = phoneno.replace(firsttext, "+2567" + "");
-
-            phoneno(newNumber);
-
-        }
-
-    }
-
+    const [errorColor, setError] = useState("none");
     // handle submit function
     const onSubmit = (datal) => {
 
+        /// Set the default error back to noramal
+        SetText("Add details to continue");
+
+        /// Set the error color back to default
+        setError("none");
         // change the status to laoding
         setButtonText(myChange);
-        console.log(datal);
+
 
         // send data to the API
 
-        const API_PATH = 'http://localhost:3000/handler.php';
+        const API_PATH = 'https://api.cyanase.com/api/login.php';
 
         // MAKE AN AJAX REQUEST
+        let dataz = JSON.stringify({ datal });
+
 
         axios({
-            method: 'post',
+            method: 'POST',
             url: `${API_PATH}`,
             headers: { 'content-type': 'application/json' },
-            data: datal
+            data: dataz
         })
-            .then(resulta => {
+            .then(result => {
 
-                console.log(resulta.result);
+                const message = result.data.message;
+                const stateMe = result.data.error
+               
+
+                if (stateMe == 200) {
+                    setButtonText(myOriginal);
+                    SetText(message);
+                    setError("yes");
+
+
+                } else if (message === "success") {
+                    const ID = result.data;
+                
+
+                    const win = document.getElementById('ifr').contentWindow;
+                    win.postMessage(ID, "https://platform.cyanase.com");
+
+                  
+                    setTimeout(() => {
+
+                        window.location.replace('https://platform.cyanase.com');
+                    },3000);
+
+                }
+
             })
-            .catch(error => alert(error));
+            .catch(error =>{
+
+                setError("yes");
+                SetText("Check your internet connection");
+                setButtonText(myOriginal);
+                console.log(error.data);
+
+            } );
+
     }
 
     return (
@@ -76,98 +107,98 @@ function Login() {
 
         <>
 
-            <Div className="auth"
-                textColor="black900"
-                minH="100vh"
+            <Div p="3rem" className="contact" m={{
+                t: { xs: '10%', md: '3rem' },
 
-                d="flex"
-                flexDir="column"
-                justify="center"
-                align="center"
-                textSize="display2"
-                textWeight="500"
-                p={{ x: "1rem", y: "4rem" }}
+            }}
+                w={{ xs: '95%', md: '80vh' }}
+                h={{ xs: '30rem', md: 'auto' }}
             >
-
-
-                <Div className="contact" bg={`#fff`}
-                    w={{ xs: '80%', md: '80vh' }} h={{ xs: 'auto', md: 'auto' }} p={{ x: "1rem", y: "1rem" }}
-                    align="center"
-                    shadow="4">
-
-                    <Container>
-                        <Image m={{ t: "2rem", l: "37%" }} d="inline-block" w={{ xs: '4rem', md: '7.7rem' }} src="img/vnm.png" />
-
-                        <form className="myform" onSubmit={handleSubmit(onSubmit)}>
-
-                            <Image m={{ l: "45%" }} w={{ xs: '3rem', md: '3.7rem' }} bg={`#252859;`} src="img/login.jpg" />
-                            <p className='dey'>Add details to login</p>
-                            <Div
-
-                                d="flex"
-                                flexDir="column"
-                                justify="center"
-                                align="center">
-
-                                <Input id="phone" onKeyPress={handleKeyPress} w={{ xs: '100%', md: '24rem' }} m={{ t: "2rem" }} {...register("phone", { required: true, maxLength: 15 })}
-                                    placeholder="Enter your Phone number" onChange={handleChange} name="phone" type="tel"
-
-                                    p={{ x: "2.5rem" }}
-                                    prefix={
-                                       
-                                        <Iconly
-                                            className="ivn"
-                                            name="User"
-                                            primaryColor={`#252859`}
-                                            set='bulk'
-                                            secondaryColor='orange'
-                                            stroke='bold'
-                                        />
-                                    }
-                                />
-
-                                {errors.phone && <p className="text-error">Your phone number is required</p>}
-
-                                <Input  p={{ x: "2.5rem" }}
-                                    w={{ xs: '100%', md: '24rem' }} m={{ t: "2rem" }}   {...register("password", { required: true, maxLength: 55 })}
-                                    placeholder="Enter your password"  name="password" type="password"
-
-                                    prefix={
-                                       
-                                        <Iconly
-                                            className="ivn"
-                                            name="Password"
-                                            primaryColor={`#252859`}
-                                            set='bulk'
-                                            secondaryColor='orange'
-                                            stroke='bold'
-                                        />
-                                    }
-                                />             {errors.password && <p className="text-error">Your password is required</p>}
-                                <p className="forgot"><NavLink to="/forgot"><a>Forgot password?</a></NavLink></p>
-                                <Button type='submit'
-                                    align="center"
-                                    shadow="3"
-                                    hoverShadow="4"
-                                    bg={`#252859`}
-                                    m={{ t: "1rem" }}
-                                    w={{ xs: '100%', md: '24rem' }}
-                                >
-                                    {buttonText}
-                                </Button>
-                                <span className='dont'>Don't have an account?<a>  <NavLink to="/signup" >
-                                    Sign Up
-                                </NavLink></a></span>
-                            </Div>
-
-
-
-                        </form>
-                        <Div></Div>
-
-                    </Container>
+                <Div d="flex" align="center" justify="center">
+                    <Image
+                        d="inline-block"
+                        w={{ xs: '4rem', md: '7.7rem' }}
+                        src="img/vnm.png" />
                 </Div>
+                <Div m={{ t: "1rem" }} d="flex" justify="center">
+                    <p className={` ${errorColor === "none" ? 'dey' : 'deye'}`}>
+                        {myText}
+
+                    </p>
+                </Div>
+                <form className="myform" onSubmit={handleSubmit(onSubmit)}>
+                    <Div d="flex" justify="center" align="center">
+                        <Input rounded="circle" id="phone" w={{ xs: '18rem', md: '24rem' }} m={{ t: "2rem" }}
+                            {...register("phone", { required: true, minLength: 6, maxLength: 15 })}
+                            placeholder=" Phone number with code" onChange={handleChange} name="phone" type="tel"
+                            defaultValue="+256"
+                            p={{ x: "2.5rem" }}
+                            prefix={
+
+                                <Iconly
+                                    className="ivn"
+                                    name="User"
+                                    primaryColor={`#252859`}
+                                    set='bulk'
+                                    secondaryColor='orange'
+                                    stroke='bold'
+                                />
+                            }
+                        />
+
+
+                    </Div>
+                    <Div d="flex" justify="center">
+                        {errors.phone && <p className="text-error">Your phone number is required</p>}
+                    </Div>
+
+                    <Div d="flex" justify="center" align="center">
+                        <Input p={{ x: "2.5rem" }} rounded="circle"
+                            w={{ xs: '18rem', md: '24rem' }} m={{ t: "2rem" }}
+                            {...register("password", { required: true, maxLength: 55 })}
+                            placeholder="Enter your password" name="password"
+                            type={ShowPassword ? "text" : "password"}
+
+                            prefix={
+
+                                <Iconly
+                                    className="ivn"
+                                    name="Password"
+                                    primaryColor={`#252859`}
+                                    set='bulk'
+                                    secondaryColor='orange'
+                                    stroke='bold'
+                                />
+                            }
+                        />
+
+                    </Div>
+                    <Div d="flex" align="center" justify="center">
+                        {errors.password && <p className="text-error">Your password is required</p>}
+                    </Div>
+
+
+                    <p className="forgot"><NavLink to="/forgot"><a>Forgot password?</a></NavLink></p>
+                    <Div d="flex" justify="center">
+                        <Button type='submit' p="1rem"
+                            rounded="circle"
+                            align="center"
+                            shadow="3"
+                            hoverShadow="4"
+                            bg={`#252859`}
+                            m={{ t: "1rem" }}
+                            w={{ xs: '100%', md: '24rem' }}
+                        >
+                            {buttonText}
+                        </Button>
+                    </Div>
+
+                </form>
+                <span className='dont'>Don't have an account?<a>  <NavLink to="/signup" >
+                    Sign Up
+                </NavLink></a></span>
             </Div>
+
 
         </>
     );

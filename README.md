@@ -78,7 +78,7 @@ $ npm install // or yarn
 $ npm start
 ```
 
-Open your browser and visit http://localhost:8080
+Open your browser and visit https://api.cyanase.com:8080
 
 ## Contributing [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
 

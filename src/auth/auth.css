@@ -13,10 +13,33 @@ body {
     top: 50%;
     position: absolute;
     left: 0.75rem;
-   
+}
+.contact{
+
+margin: 0 auto;
+background-color: #fff;
 
 }
+.selected {
 
+    background-color: #252859;
+    color: white;
+  }
+  
+  .not_selected {
+    color: #252859;
+    background-color: white;
+  }
+  
+  .not_selected .div_notes {
+    color: #828282;
+  }
+  
+.toper svg {
+
+    width: 180px;
+    height: 180px
+  }
 .text-error {
     color: red;
     font-weight: bold;
@@ -24,7 +47,7 @@ body {
     float: left;
     margin-right: 10.8rem;
 }
-
+.toper
 .brand-name {
     text-decoration: none;
     color: #252859;
@@ -48,7 +71,13 @@ body {
     font-weight: bold;
 
 }
+.deye {
+    color: red;
+    align-items: center;
+    text-align: center;
+    font-weight: bold;
 
+}
 .dont {
     float: right;
     margin-right: 9rem;

@@ -8,7 +8,8 @@ import '../auth.css';
 
 import { Iconly } from "react-iconly";
 // creating functional component ans getting props from app.js and destructuring them
-const StepTwo = ({ nextStep, prevStep }) => {
+const StepTwo = ({ nextStep, prevStep, handleFormData, values }) => {
+
     const [countryState, setCountryState] = useState({
         loading: false,
         countries: [],
@@ -19,8 +20,9 @@ const StepTwo = ({ nextStep, prevStep }) => {
     const myChange = <Icon color="white" name="Loading2" size="20px" />;
     const myOriginal = 'Continue';
     const [buttonText, setButtonText] = useState(myOriginal);
-
+    const [errorColor, setError] = useState("none");
     const [inputs, setInputs] = useState({});
+    const [myText, SetText] = useState("How should we contact you");
     const { register, handleSubmit, formState: { errors } } = useForm();
 
     // hnadle on change in forms
@@ -60,7 +62,7 @@ const StepTwo = ({ nextStep, prevStep }) => {
     }, []);
     const { loading, errorMessage, countries } = countryState;
 
-    const [selectedCountry, setSelectedCountry] = useState();
+    const [selectedCountry, setSelectedCountry] = useState("none");
 
 
     //   find selected country data
@@ -72,13 +74,54 @@ const StepTwo = ({ nextStep, prevStep }) => {
         return false;
     });
     const dialCode = searchSelectedCountry && searchSelectedCountry.dial_code;
+    const CountryCode = searchSelectedCountry && searchSelectedCountry.code;
     // handle submit function
-    const onSubmit = () => {
-        // change the status to loading
-        setButtonText(myChange);
-        // load net step
+    const onSubmit = (el) => {
+    
+        if (selectedCountry === "none") {
 
-        nextStep();
+            setError("yes");
+            SetText("Choose your country to continue");
+        } else {
+
+            const ACCOUNT_CHECK = "https://api.cyanase.com/api/account_check.php"
+            setButtonText(myChange);
+
+            axios({
+                method: 'POST',
+                url: `${ACCOUNT_CHECK}`,
+                headers: { 'content-type': 'application/json' },
+                data: { Phone: el.phone, email: el.email }
+            })
+                .then(results => {
+                    
+                    if (results.data.status === "OK") {
+                        const location = { "country": CountryCode };
+                        localStorage.setItem('Contacts', JSON.stringify(el));
+                        localStorage.setItem('place', JSON.stringify(location));
+                        setButtonText(myOriginal);
+                        nextStep();
+                       
+                    } else {
+                        setError("yes");
+                        SetText("Contact details already in use");
+                        setButtonText(myOriginal);
+                    }
+
+                })
+                .catch(error => {
+                    setError("yes");
+                    SetText("Check your internet connection");
+                    setButtonText(myOriginal);
+                    console.log(error.data)
+                });
+
+
+
+
+
+        }
+
 
 
     }
@@ -86,165 +129,153 @@ const StepTwo = ({ nextStep, prevStep }) => {
     return (
         <>
 
-            <Div className="auth"
-                textColor="black900"
-                minH="100vh"
 
-                d="flex"
-                flexDir="column"
-                justify="center"
-                align="center"
-                textSize="display2"
-                textWeight="500"
-                p={{ x: "1rem", y: "1rem" }}
-            >
+            <form className="myform" onSubmit={handleSubmit(onSubmit)}>
 
+                <Div d="flex" align="center" justify="center">
+                    <Image w={{ xs: '3rem', md: '3.7rem' }}
+                        bg={`#252859;`} src="img/signup.jpg" />
 
-                <Div className="contact" bg={`#fff`}
-                    w={{ xs: '80%', md: '80vh' }} h={{ xs: 'auto', md: 'auto' }} p={{ x: "1rem", y: "1rem" }}
-                    align="center"
-                    shadow="4">
+                </Div>
+                <Div d="flex" justify="center">
+                    <p className={` ${errorColor === "none" ? 'dey' : 'deye'}`}>
+                        {myText}
+                    </p>
+                </Div>
+                <Div
+                    m={{ t: "2rem" }}
+                    d="flex"
+                    flexDir="column"
+                    justify="center"
+                    align="center">
 
-                    <Container>
-                        <Image m={{ t: "2rem", l: "37%" }} d="inline-block" w={{ xs: '4rem', md: '7.7rem' }} src="img/vnm.png" />
+                    <section>
+                        <Div className="">
 
-                        <form className="myform" onSubmit={handleSubmit(onSubmit)}>
+                            <div>
 
-                            <Image m={{ l: "45%" }} w={{ xs: '3rem', md: '3.7rem' }} bg={`#252859;`} src="img/signup.jpg" />
-                            <p className='dey'>Tell us how we should contact you.</p>
-                            <Div
-                                m={{ t: "2rem" }}
-                                d="flex"
-                                flexDir="column"
-                                justify="center"
-                                align="center">
+                                <div>
 
-                                <section>
-                                    <Div className="">
+                                </div>
+                                <div className="grid justify-center mt-14 mx-10 space-y-10">
 
-                                        <div>
+                                    <Div d="flex"
+                                        flexDir="column"
+                                        justify="center"
+                                        align="center" >
+                                        <select
+                                            value={selectedCountry}
+                                            onChange={(e) => setSelectedCountry(e.target.value)}
+                                            className="myOptions"
+                                        >
+                                            <option className='select'>--Select Country--</option>
+
+                                            {countries.map((item) => {
+                                                return (
+                                                    <option onChange={handleFormData("country")} name="country" key={uuidv4()} value={item.country_name}>
+                                                        {item.country_name}
+                                                    </option>
+                                                );
+                                            })}
+                                            {errors.country && <p className="text-error">Select country to continue</p>}
+                                        </select>
+                                    </Div>
+                                    <div>
+
+                                        <div className="flex space-x-4">
 
                                             <div>
 
-                                            </div>
-                                            <div className="grid justify-center mt-14 mx-10 space-y-10">
+                                                <Input defaultValue={dialCode} w={{ xs: '18rem', md: '24rem' }}
+                                                    m={{ t: "2rem" }} rounded="circle"
+                                                    {...register("phone", { required: true, minLength: 5, maxLength: 55 })}
+                                                    placeholder="Enter your phone number"
+                                                    onChange={handleFormData("phone")}
+                                                    name="phone" type="tel"
+                                                    p={{ x: "2.5rem" }}
+                                                    prefix={
 
-                                                <Div d="flex"
-                                                    flexDir="column"
-                                                    justify="center"
-                                                    align="center" >
-                                                    <select
-                                                        value={selectedCountry}
-                                                        onChange={(e) => setSelectedCountry(e.target.value)}
-                                                        className="myOptions"
-                                                    >
-                                                        <option className='select'>--Select Country--</option>
+                                                        <Iconly
+                                                            className="ivn"
+                                                            name="Call"
+                                                            primaryColor={`#252859`}
+                                                            set='bulk'
+                                                            secondaryColor='orange'
+                                                            stroke='bold'
+                                                        />
+                                                    }
+                                                />
 
-                                                        {countries.map((item) => {
-                                                            return (
-                                                                <option name="country" key={uuidv4()} value={item.country_name}>
-                                                                    {item.country_name}
-                                                                </option>
-                                                            );
-                                                        })}
-                                                        {errors.country && <p className="text-error">Select country to continue</p>}
-                                                    </select>
-                                                </Div>
-                                                <div>
+                                                {errors.phone && <p className="text-error">Your phone number is required</p>}
 
-                                                    <div className="flex space-x-4">
-
-                                                        <div>
-                                                        <Input   defaultValue={dialCode} w={{ xs: '100%', md: '24rem' }}
-                                                                m={{ t: "2rem" }}
-                                                                {...register("phone", { required: true, minLength: 5, maxLength: 55 })}
-                                                                placeholder="Enter your phone number"
-                                                                name="phone" type="tel"
-                                                                p={{ x: "2.5rem" }}
-                                                                prefix={
-
-                                                                    <Iconly
-                                                                        className="ivn"
-                                                                        name="Call"
-                                                                        primaryColor={`#252859`}
-                                                                        set='bulk'
-                                                                        secondaryColor='orange'
-                                                                        stroke='bold'
-                                                                    />
-                                                                }
-                                                            />
-
-                                                            {errors.phone && <p className="text-error">Your phone number is required</p>}
-                                                            
-
-                                                        </div>
-                                                    </div>
-
-                                                </div>
 
                                             </div>
-
                                         </div>
-                                    </Div>
-                                </section>
-                                <Input
-                                 onKeyPress w={{ xs: '100%', md: '24rem' }}
-                                  m={{ t: "2rem" }}
-                                   {...register("email", { required: true, maxLength: 65 })}
-                                    placeholder="Enter email" onChange={handleChange} name="email" type="text"
 
-                                    p={{ x: "2.5rem" }}
-                                    prefix={
+                                    </div>
 
-                                        <Iconly
-                                            className="ivn"
-                                            name="Message"
-                                            primaryColor={`#252859`}
-                                            set='bulk'
-                                            secondaryColor='orange'
-                                            stroke='bold'
-                                        />
-                                    }
-                                />
+                                </div>
 
-                                {errors.email && <p className="text-error">Check your email</p>}
-                                <Row flexDir={{ xs: 'row', lg: 'row' }}>
-                                    <Col>
-                                        <Button onClick={prevStep}
-                                            align="center"
-                                            shadow="3"
-                                            hoverShadow="4"
-                                            bg={`#252859`}
-                                            m={{ t: "1rem" }}
-                                            w={{ xs: 'aut', md: 'auto' }}
-                                        >
-                                            Previous
-                                        </Button>
-                                    </Col>
-                                    <Col><Button type='submit'
-                                        align="center"
-                                        shadow="3"
-                                        hoverShadow="4"
-                                        bg={`#252859`}
-                                        m={{ t: "1rem" }}
-                                        w={{ xs: 'auto', md: 'auto' }}
-                                    >
-                                        {buttonText}
-                                    </Button></Col>
-                                </Row>
-                                <span className='dont'>Already have an account?<a>  <NavLink to="/login" >
-                                    Login
-                                </NavLink></a></span>
-                            </Div>
+                            </div>
+                        </Div>
+                    </section>
+                    <Input
+                        w={{ xs: '18rem', md: '24rem' }}
+                        m={{ t: "2rem" }} rounded="circle"
+                        {...register("email", { required: true, maxLength: 65, pattern: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/ })}
+                        placeholder="Enter email"
+                        defaultValue={values.email}
+                        onChange={handleFormData("email")}
+                        name="email" type="text"
 
+                        p={{ x: "2.5rem" }}
+                        prefix={
 
+                            <Iconly
+                                className="ivn"
+                                name="Message"
+                                primaryColor={`#252859`}
+                                set='bulk'
+                                secondaryColor='orange'
+                                stroke='bold'
+                            />
+                        }
+                    />
 
-                        </form>
-                        <Div></Div>
-
-                    </Container>
+                    {errors.email && <p className="text-error">Check your email</p>}
+                    <Row flexDir={{ xs: 'row', lg: 'row' }}>
+                        <Col>
+                            <Button onClick={prevStep}
+                                align="center" rounded="circle"
+                                shadow="3"
+                                hoverShadow="4"
+                                bg={`#252859`}
+                                m={{ t: "1rem" }}
+                                w={{ xs: 'aut', md: 'auto' }}
+                            >
+                                Previous
+                            </Button>
+                        </Col>
+                        <Col><Button type='submit' rounded="circle"
+                            align="center"
+                            shadow="3"
+                            hoverShadow="4"
+                            bg={`#252859`}
+                            m={{ t: "1rem" }}
+                            w={{ xs: 'auto', md: 'auto' }}
+                        >
+                            {buttonText}
+                        </Button></Col>
+                    </Row>
+                    <span className='dont'>Already have an account?<a>  <NavLink to="/login" >
+                        Login
+                    </NavLink></a></span>
                 </Div>
-            </Div>
+
+
+
+            </form>
+
 
         </>
     );

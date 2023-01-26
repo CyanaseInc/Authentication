@@ -12,6 +12,7 @@ import Verify from "../src/auth/verify";
 
 
 
+
 const debug =
   process.env.NODE_ENV === "production" ? void 0 : new DebugEngine();
 // 1. Create a client engine instance
@@ -30,6 +31,7 @@ class App extends React.Component {
   };
 
   componentDidMount() {
+    
     this.fakeRequest().then(() => {
       const el = document.querySelector(".loader-container");
       if (el) {
