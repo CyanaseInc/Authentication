@@ -10,7 +10,7 @@
   "scripts": {
     "start": "set HTTPS=true&&webpack-dev-server",
     "docs": "NODE_ENV=production webpack -p --openssl-legacy-provider",
-    "build": "babel src -d dist",
+    "build": "webpack -d && copy src\\index.html dist\\index.html /y && webpack-dev-server --content-base src --inline --port 3000",
     "clean": "rm -rf dist",
     "dist": "yarn run clean && yarn run build"
   },
@@ -56,6 +56,7 @@
     "react-hook-form": "^7.32.1",
     "react-iconly": "^2.2.5",
     "react-icons": "^4.4.0",
+    "react-loadable": "^5.5.0",
     "react-router-dom": "^6.3.0",
     "react-syntax-highlighter": "^15.5.0",
     "styled-components": "^5.3.5",
